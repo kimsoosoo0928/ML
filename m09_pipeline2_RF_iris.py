@@ -1,37 +1,40 @@
 import numpy as np
-import pandas as pd
-from sklearn.datasets import load_diabetes
+from sklearn.datasets import load_iris
 from tensorflow.keras.models import Sequential
 from tensorflow.keras.layers import Dense
 from sklearn.metrics import r2_score
+from sklearn.model_selection import train_test_split
+from sklearn.preprocessing import MinMaxScaler
 
-#1. 데이터 
-datasets = load_diabetes()
+datasets = load_iris()
+
 x = datasets.data
 y = datasets.target
 
-from sklearn.model_selection import train_test_split
-x_train, x_test, y_train, y_test = train_test_split(x, y, random_state=66, test_size=0.4)
-x_test, x_val, y_test, y_val = train_test_split(x_test, y_test, random_state=66, test_size=0.5)
+print(x.shape, y.shape) # (150, 4) (150,)
+print(y)
 
-print(x.shape, y.shape) # (442, 10) (442,)
+#1. 데이터
+x_train, x_test, y_train, y_test = train_test_split(x, y,
+        train_size=0.7,test_size=0.3, shuffle=True, random_state=8)
 
-print(datasets.feature_names)
-# ['age', 'sex', 'bmi', 'bp', 's1', 's2', 's3', 's4', 's5', 's6']
-print(datasets.DESCR)
-
-print(y[:30])
-print(np.min(y), np.max(y))
+#1-1. 데이터 전처리
+# from sklearn.preprocessing import MinMaxScaler, StandardScaler,QuantileTransformer
+# scaler = QuantileTransformer() 
+# scaler.fit(x_train) 
+# x_train = scaler.transform(x_train) 
+# x_test = scaler.transform(x_test)
 
 #2. 모델 구성
-# model = LinearSVC()
-# model = SVC()
-# model = KNeighborsClassifier()
-# model = LogisticRegression()
-# model = DecisionTreeClassifier()
-# model = RandomForestClassifier()
-# model = DecisionTreeRegressor()
-model = RandomForestRegressor()
+from sklearn.svm import LinearSVC, SVC
+from sklearn.neighbors import KNeighborsClassifier, KNeighborsRegressor
+from sklearn.linear_model import LogisticRegression # 분류모델 
+from sklearn.tree import DecisionTreeClassifier
+from sklearn.ensemble import RandomForestClassifier
+
+from sklearn.pipeline import make_pipeline, Pipeline
+
+model = make_pipeline(MinMaxScaler(), RandomForestClassifier())
 
 #3. 컴파일 및 훈련 + EarlyStopping
 model.fit(x_train, y_train)
@@ -61,7 +64,9 @@ y_predict = model.predict(x_test)
 acc = accuracy_score(y_test, y_predict)
 print("accuracy_score : ", acc)
 
-print("===============예측==================")
-print(y_test[:5])
-y_predict2 = model.predict(x_test[:5])
-print(y_predict2)
+
+
+'''
+0.9111111111111111
+accuracy_score :  0.9111111111111111
+'''
