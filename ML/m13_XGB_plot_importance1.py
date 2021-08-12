@@ -1,9 +1,11 @@
 from sklearn import datasets
 from sklearn.tree import DecisionTreeClassifier, DecisionTreeRegressor
 from sklearn.ensemble import RandomForestClassifier, RandomForestRegressor
+from sklearn.ensemble import GradientBoostingRegressor
 from xgboost import XGBClassifier, XGBRFRegressor
 from sklearn.datasets import load_iris, load_boston
 from sklearn.model_selection import train_test_split
+from xgboost import plot_importance
 
 # 1. data
 datasets = load_boston()
@@ -12,7 +14,7 @@ x_train, x_test, y_train, y_test = train_test_split(
 )
 
 # 2. model
-# model = DecisionTreeRegressor(max_depth=4)
+model = DecisionTreeRegressor(max_depth=4)
 # model = GradientBoostingClassifier()
 # model = RandomForestRegressor()
 model = XGBRFRegressor()
@@ -35,14 +37,17 @@ print(model.feature_importances_) # 강력함
 import matplotlib.pyplot as plt
 import numpy as np
 
-def plot_feature_importances_dataset(model):
-    n_features = datasets.data.shape[1]
-    plt.barh(np.arange(n_features), model.feature_importances_,
-            align='center')
-    plt.yticks(np.arange(n_features), datasets.feature_names)
-    plt.xlabel("Feature Importances")
-    plt.ylabel("Features")
-    plt.ylim(-1, n_features)
+# def plot_feature_importances_dataset(model):
+#     n_features = datasets.data.shape[1]
+#     plt.barh(np.arange(n_features), model.feature_importances_,
+#             align='center')
+#     plt.yticks(np.arange(n_features), datasets.feature_names)
+#     plt.xlabel("Feature Importances")
+#     plt.ylabel("Features")
+#     plt.ylim(-1, n_features)
 
-plot_feature_importances_dataset(model)
-plt.show()
+# plot_feature_importances_dataset(model)
+# plt.show()
+
+plot_importance(model)
+plt.show

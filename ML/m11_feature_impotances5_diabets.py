@@ -15,7 +15,8 @@ x_train, x_test, y_train, y_test = train_test_split(
 # 2. model
 # model = DecisionTreeRegressor(max_depth=4)
 # model = GradientBoostingClassifier()
-model = RandomForestRegressor()
+# model = RandomForestRegressor()
+model = XGBRFRegressor()
 
 # 3. fit
 model.fit(x_train, y_train)
